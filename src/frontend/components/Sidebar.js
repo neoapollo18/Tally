@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useSidebar } from '../context/SidebarContext';
 
 function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isCollapsed, setIsCollapsed } = useSidebar();
   
 
   const [clickedMenu, setClickedMenu] = useState(null);
-  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const menuItems = [
     { 
@@ -37,7 +38,7 @@ function Sidebar() {
     }
   ];
 
-  // Update menuStyles for collapsed state
+ 
   const getMenuStyles = (isCollapsed) => ({
     Tally: {
       container: `text-[20px] font-[400] leading-6 text-[#444EAA] ${isCollapsed ? 'py-2' : '-mt-1'}`,
@@ -69,7 +70,7 @@ function Sidebar() {
   const menuStyles = getMenuStyles(isCollapsed);
 
   return (
-    <div className={`${isCollapsed ? 'w-[64px]' : 'w-[230px]'} h-screen bg-gradient-to-b from-[#FFFFFF] to-[#FAFAFA] border-r transition-all duration-300 relative`}>
+    <div className={`fixed left-0 top-0 ${isCollapsed ? 'w-[64px]' : 'w-[230px]'} h-screen bg-gradient-to-b from-[#FFFFFF] to-[#FAFAFA] border-r transition-all duration-300`}>
       <button 
         onClick={() => setIsCollapsed(!isCollapsed)}
         className={`absolute ${isCollapsed ? 'bottom-[120px] w-full' : 'top-4 right-4'} flex items-center justify-center py-3 text-gray-400 hover:text-gray-600 transition-all duration-300 z-20`}

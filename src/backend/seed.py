@@ -1,7 +1,6 @@
-from database import SessionLocal
-import models
+from .database import SessionLocal
+from . import models
 
-# Initial data
 initial_data = [
     {
         "name": "Gildan T-Shirt - Red / M",
@@ -64,7 +63,7 @@ initial_data = [
 def seed_database():
     db = SessionLocal()
     try:
-        # Check if we already have data
+        
         existing = db.query(models.Material).first()
         if not existing:
             for data in initial_data:
@@ -73,7 +72,7 @@ def seed_database():
             db.commit()
             print("Database seeded successfully!")
         else:
-            print("Database already contains data")
+            print("Database contains data")
     finally:
         db.close()
 

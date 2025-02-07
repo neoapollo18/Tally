@@ -4,12 +4,14 @@ from sqlalchemy import pool
 from alembic import context
 import sys
 import os
+from pathlib import Path
 
-# Add the parent directory to the Python path
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+# Add the src directory to Python path
+src_path = Path(__file__).parents[2]
+sys.path.append(str(src_path))
 
-from config import settings
-import models  # Import your models
+from backend.config import settings
+from backend.models import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -27,7 +29,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = models.Base.metadata
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
