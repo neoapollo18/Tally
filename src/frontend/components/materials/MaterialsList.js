@@ -3,6 +3,7 @@ import MaterialItem from './MaterialItem';
 
 function MaterialsList() {
   const [materials, setMaterials] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -128,6 +129,83 @@ function MaterialsList() {
     }
   };
 
+
+  const levenshteinDistance = (str1, str2) => {
+    const track = Array(str2.length + 1).fill(null).map(() =>
+      Array(str1.length + 1).fill(null));
+    
+    for (let i = 0; i <= str1.length; i++) track[0][i] = i;
+    for (let j = 0; j <= str2.length; j++) track[j][0] = j;
+
+    for (let j = 1; j <= str2.length; j++) {
+      for (let i = 1; i <= str1.length; i++) {
+        const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
+        track[j][i] = Math.min(
+          track[j][i - 1] + 1, // deletion
+          track[j - 1][i] + 1, // insertion
+          track[j - 1][i - 1] + indicator // substitution
+        );
+      }
+    }
+    return track[str2.length][str1.length];
+  };
+
+  // Fuzzy search implementation
+  const filteredMaterials = materials.filter(material => {
+    if (!searchQuery) return true;
+    
+    const searchTerms = searchQuery.toLowerCase().split(' ');
+    const materialWords = material.name.toLowerCase().split(' ');
+    
+    return searchTerms.every(term => 
+      materialWords.some(word => {
+        // Exact match
+        if (word.includes(term)) return true;
+        
+        // Fuzzy match (allow for typos and similar words)
+        const distance = levenshteinDistance(word, term);
+        const maxDistance = Math.floor(term.length * 0.3); // Allow 30% difference
+        return distance <= maxDistance;
+      })
+    );
+  }).sort((a, b) => {
+
+    const scoreA = levenshteinDistance(a.name.toLowerCase(), searchQuery.toLowerCase());
+    const scoreB = levenshteinDistance(b.name.toLowerCase(), searchQuery.toLowerCase());
+    return scoreA - scoreB;
+  });
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Escape') {
+      setSearchQuery('');
+    }
+  };
+
+
+  const getVisibilityClass = (material) => {
+    if (!searchQuery) return "opacity-100 transition-opacity duration-200";
+    
+    const searchTerms = searchQuery.toLowerCase().split(' ');
+    const materialWords = material.name.toLowerCase().split(' ');
+    
+    const isVisible = searchTerms.every(term => 
+      materialWords.some(word => {
+        if (word.includes(term)) return true;
+        const distance = levenshteinDistance(word, term);
+        const maxDistance = Math.floor(term.length * 0.3);
+        return distance <= maxDistance;
+      })
+    );
+
+    return isVisible 
+      ? "opacity-100 transition-opacity duration-200" 
+      : "opacity-0 h-0 overflow-hidden transition-all duration-200";
+  };
+
   if (loading) return (
     <div className="p-4 text-center text-gray-600">
       Loading materials...
@@ -155,7 +233,11 @@ function MaterialsList() {
               <input
                 type="text"
                 placeholder="Search Materials"
+                value={searchQuery}
+                onChange={handleSearch}
+                onKeyDown={handleKeyPress}
                 className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#DEDEDE] rounded text-[14px] text-[#858585] placeholder-[#858585] focus:outline-none focus:border-[#DEDEDE]"
+                aria-label="Search materials"
               />
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -186,18 +268,20 @@ function MaterialsList() {
         </div>
         
         <div className="mt-4">
-          {materials.length === 0 ? (
-            <div className="text-center  text-gray-500">No materials found</div>
-          ) : (
-            <div className="flex flex-col -mx-6">
-              {materials.map((material) => (
+          <div className="flex flex-col -mx-6">
+            {materials.map((material) => (
+              <div key={material.id} className={getVisibilityClass(material)}>
                 <MaterialItem 
-                  key={material.id}
                   material={material}
                   onUpdateQuantity={updateQuantity}
                   onDelete={handleDelete}
                 />
-              ))}
+              </div>
+            ))}
+          </div>
+          {materials.every(m => getVisibilityClass(m).includes('opacity-0')) && (
+            <div className="text-center text-gray-500 py-4">
+              No similar materials found
             </div>
           )}
         </div>
