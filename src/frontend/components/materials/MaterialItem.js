@@ -40,7 +40,7 @@ function MaterialItem({ material, onUpdateQuantity, onDelete }) {
             <div className="h-[1px] bg-[#DEDEDE]"></div>
             <div className="flex-1 flex items-center justify-center bg-[#F5F5F5]">
               <div className="text-[11px] leading-none text-[#999999] tracking-wide">
-                {material.max_quantity} PCS
+                {material.maxQuantity} PCS
               </div>
             </div>
           </div>

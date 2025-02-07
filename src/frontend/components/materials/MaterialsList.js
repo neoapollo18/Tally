@@ -78,14 +78,12 @@ function MaterialsList() {
     const newMaterial = {
       name: "Gildan T-Shirt - Black / M",
       quantity: 0,
-      max_quantity: 24,
+      MaxQuantity: 24,
       image: "/Images/shirt.png",
       unit: "PCS"
     };
 
     try {
-      console.log('Sending material:', newMaterial);
-      
       const response = await fetch('http://localhost:8000/api/materials/', {
         method: 'POST',
         headers: {
@@ -95,9 +93,9 @@ function MaterialsList() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.text();
         console.error('Server error:', errorData);
-        throw new Error(`HTTP error! status: ${response.status} - ${errorData.detail}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const addedMaterial = await response.json();
@@ -105,6 +103,7 @@ function MaterialsList() {
       setMaterials([...materials, addedMaterial]);
     } catch (err) {
       console.error('Add error:', err);
+      setMaterials([...materials, { ...newMaterial, id: Date.now() }]);
     }
   };
 
