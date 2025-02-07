@@ -3,10 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 
-# Get system username
+
 system_user = os.getenv('USER', 'charles')  # defaults to 'charles' based on your error log path
 
-# Update database URL to use the correct database name
+
 SQLALCHEMY_DATABASE_URL = f"postgresql://{system_user}@localhost/materials_db"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
