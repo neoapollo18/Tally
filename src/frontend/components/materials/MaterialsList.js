@@ -129,7 +129,7 @@ function MaterialsList() {
     }
   };
 
-
+  //math stuff for search
   const levenshteinDistance = (str1, str2) => {
     const track = Array(str2.length + 1).fill(null).map(() =>
       Array(str1.length + 1).fill(null));
@@ -141,16 +141,15 @@ function MaterialsList() {
       for (let i = 1; i <= str1.length; i++) {
         const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
         track[j][i] = Math.min(
-          track[j][i - 1] + 1, // deletion
-          track[j - 1][i] + 1, // insertion
-          track[j - 1][i - 1] + indicator // substitution
+          track[j][i - 1] + 1,
+          track[j - 1][i] + 1, 
+          track[j - 1][i - 1] + indicator 
         );
       }
     }
     return track[str2.length][str1.length];
   };
 
-  // Fuzzy search implementation
   const filteredMaterials = materials.filter(material => {
     if (!searchQuery) return true;
     
@@ -162,9 +161,9 @@ function MaterialsList() {
         // Exact match
         if (word.includes(term)) return true;
         
-        // Fuzzy match (allow for typos and similar words)
+   
         const distance = levenshteinDistance(word, term);
-        const maxDistance = Math.floor(term.length * 0.3); // Allow 30% difference
+        const maxDistance = Math.floor(term.length * 0.3); // 30% difference bang
         return distance <= maxDistance;
       })
     );
