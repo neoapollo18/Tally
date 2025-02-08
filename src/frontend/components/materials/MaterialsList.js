@@ -76,10 +76,14 @@ function MaterialsList() {
   };
 
   const handleAddNew = async () => {
+
+    const tempId = Date.now();
+
     const newMaterial = {
-      name: "Gildan T-Shirt - Black / M",
+      id: tempId,
+      name: prompt("Enter material name:") || "New Material", 
       quantity: 0,
-      maxQuantity: 24,
+      maxQuantity: parseInt(prompt("Enter maximum quantity:") || "24"),
       image: "/Images/shirt.png",
       unit: "PCS"
     };
