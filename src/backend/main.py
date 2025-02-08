@@ -10,11 +10,10 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Your React app's origin
-    allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods including DELETE
+    allow_origins=["*"],  
+    allow_credentials=False,  
+    allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["*"]
 )
 
 
@@ -24,9 +23,9 @@ class QuantityUpdate(BaseModel):
 
 class MaterialCreate(BaseModel):
     name: str
-    quantity: int
-    max_quantity: int
     image: str
+    quantity: int
+    maxQuantity: int
     unit: str
 
 
@@ -62,34 +61,27 @@ async def update_material_quantity(
 async def create_material(material: MaterialCreate, db: Session = Depends(get_db)):
     try:
         print(f"Received material data: {material.dict()}")  # Debug log
-        db_material = Material(
-            name=material.name,
-            quantity=material.quantity,
-            max_quantity=material.max_quantity,
-            image=material.image,
-            unit=material.unit
-        )
-        print(f"Created material object: {db_material.__dict__}")  # Debug log
+        db_material = Material(**material.dict())
         db.add(db_material)
         db.commit()
         db.refresh(db_material)
-        print(f"Successfully created material: {db_material.name}")
+        print(f"Created new material: {db_material.name}")
         return db_material
     except Exception as e:
         print(f"Error creating material: {str(e)}")
         db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) 
 
 @app.delete("/api/materials/{material_id}")
 async def delete_material(material_id: int, db: Session = Depends(get_db)):
     try:
         material = db.query(Material).filter(Material.id == material_id).first()
-        if material is None:
+        if not material:
             raise HTTPException(status_code=404, detail="Material not found")
+        
         db.delete(material)
         db.commit()
-        print(f"Deleted material: {material_id}")
-        return {"message": "Material deleted"}
+        return {"message": f"Material {material_id} deleted successfully"}
     except Exception as e:
         print(f"Error deleting material: {str(e)}")
         db.rollback()

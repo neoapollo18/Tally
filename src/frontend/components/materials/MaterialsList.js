@@ -79,12 +79,14 @@ function MaterialsList() {
     const newMaterial = {
       name: "Gildan T-Shirt - Black / M",
       quantity: 0,
-      MaxQuantity: 24,
+      maxQuantity: 24,
       image: "/Images/shirt.png",
       unit: "PCS"
     };
 
     try {
+      console.log('Sending material:', newMaterial);
+      
       const response = await fetch('http://localhost:8000/api/materials/', {
         method: 'POST',
         headers: {
@@ -94,7 +96,7 @@ function MaterialsList() {
       });
 
       if (!response.ok) {
-        const errorData = await response.text();
+        const errorData = await response.json();
         console.error('Server error:', errorData);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -104,13 +106,14 @@ function MaterialsList() {
       setMaterials([...materials, addedMaterial]);
     } catch (err) {
       console.error('Add error:', err);
-      setMaterials([...materials, { ...newMaterial, id: Date.now() }]);
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/materials/${id}/`, {
+      console.log('Deleting material:', id); // Debug log
+      
+      const response = await fetch(`http://localhost:8000/api/materials/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -118,14 +121,16 @@ function MaterialsList() {
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server error:', errorData);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      console.log('Deleted material:', id);
+      console.log('Material deleted successfully');
+      // Remove the deleted material from state
       setMaterials(materials.filter(material => material.id !== id));
     } catch (err) {
       console.error('Delete error:', err);
-      setMaterials(materials.filter(material => material.id !== id));
     }
   };
 
