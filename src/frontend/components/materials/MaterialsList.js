@@ -131,7 +131,7 @@ function MaterialsList() {
       }
 
       console.log('Material deleted successfully');
-      // Remove the deleted material from state
+      
       setMaterials(materials.filter(material => material.id !== id));
     } catch (err) {
       console.error('Delete error:', err);
