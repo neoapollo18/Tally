@@ -111,7 +111,7 @@ function MaterialsList() {
 
   const handleDelete = async (id) => {
     try {
-      console.log('Deleting material:', id); // Debug log
+      console.log('Deleting material:', id); 
       
       const response = await fetch(`http://localhost:8000/api/materials/${id}`, {
         method: 'DELETE',
@@ -240,7 +240,7 @@ function MaterialsList() {
                 value={searchQuery}
                 onChange={handleSearch}
                 onKeyDown={handleKeyPress}
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#DEDEDE] rounded text-[14px] text-[#858585] placeholder-[#858585] focus:outline-none focus:border-[#DEDEDE]"
+                className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#DEDEDE] rounded text-[14px] text-[#858585] font-light placeholder-[#858585] focus:outline-none focus:border-[#DEDEDE]"
                 aria-label="Search materials"
               />
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
