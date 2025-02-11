@@ -60,7 +60,7 @@ async def update_material_quantity(
 @app.post("/api/materials/")
 async def create_material(material: MaterialCreate, db: Session = Depends(get_db)):
     try:
-        print(f"Received material data: {material.dict()}")  # Debug log
+        print(f"Received material data: {material.dict()}")  
         db_material = Material(**material.dict())
         db.add(db_material)
         db.commit()

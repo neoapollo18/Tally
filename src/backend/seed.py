@@ -45,7 +45,7 @@ initial_data = [
         "unit": "PCS"
     },
     {
-        "name": "Gildan T-Shirt - White / M",
+        "name": "Gildan T-Shirt - White / M", 
         "image": "/Images/tshirt-white.png",
         "quantity": 51,
         "maxQuantity": 24,
@@ -55,6 +55,41 @@ initial_data = [
         "name": "Gildan T-Shirt - White / L",
         "image": "/Images/tshirt-white.png",
         "quantity": 29,
+        "maxQuantity": 24,
+        "unit": "PCS"
+    },
+    {
+        "name": "Gildan T-Shirt - Navy / S",
+        "image": "/Images/tshirt-navy.png", 
+        "quantity": 18,
+        "maxQuantity": 24,
+        "unit": "PCS"
+    },
+    {
+        "name": "Gildan T-Shirt - Navy / M",
+        "image": "/Images/tshirt-navy.png",
+        "quantity": 42,
+        "maxQuantity": 24,
+        "unit": "PCS"
+    },
+    {
+        "name": "Gildan T-Shirt - Navy / L",
+        "image": "/Images/tshirt-navy.png",
+        "quantity": 31,
+        "maxQuantity": 24,
+        "unit": "PCS"
+    },
+    {
+        "name": "Gildan T-Shirt - Green / S",
+        "image": "/Images/tshirt-green.png",
+        "quantity": 22,
+        "maxQuantity": 24,
+        "unit": "PCS"
+    },
+    {
+        "name": "Gildan T-Shirt - Green / L",
+        "image": "/Images/tshirt-green.png",
+        "quantity": 37,
         "maxQuantity": 24,
         "unit": "PCS"
     }

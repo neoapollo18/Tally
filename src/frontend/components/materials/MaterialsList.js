@@ -167,7 +167,7 @@ function MaterialsList() {
     
     return searchTerms.every(term => 
       materialWords.some(word => {
-        // Exact match
+  
         if (word.includes(term)) return true;
         
    

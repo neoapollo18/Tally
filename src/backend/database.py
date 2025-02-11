@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 import os
 
 
-system_user = os.getenv('USER', 'charles')  # defaults to 'charles' based on your error log path
+system_user = os.getenv('USER', 'charles')  
 
 
 SQLALCHEMY_DATABASE_URL = f"postgresql://{system_user}@localhost/materials_db"

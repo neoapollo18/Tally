@@ -1,7 +1,20 @@
 import React from 'react';
 import QuantityControl from '../common/QuantityControl';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 
 function MaterialItem({ material, onUpdateQuantity, onDelete }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleItemClick = (item) => {
+    if (!item.isTally) {
+      setSelectedItem(item.name);
+      navigate(item.path);
+    }
+  };
+
   return (
     <div className="group flex items-center justify-between px-6 py-3.5 hover:bg-[#FAFAFA] relative">
       <div className="flex items-center gap-3">
